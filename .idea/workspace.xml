@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b9bacc67-806d-4dbf-9476-5f2540b60268" name="Changes" comment="I altered the readme file. I added the research paper associated with the project to the readme.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/model_development.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/MobileNetV2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/MobileNetV2.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/MobileNetV2.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +115,7 @@
       <option name="presentableId" value="Default" />
       <updated>1648018609283</updated>
       <workItem from="1648018610398" duration="1847000" />
-      <workItem from="1648020655777" duration="12904000" />
+      <workItem from="1648020655777" duration="17825000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit, adding all the files necessary for the project, however data has been excluded.">
       <created>1648019155749</created>
@@ -166,7 +166,14 @@
       <option name="project" value="LOCAL" />
       <updated>1648063113243</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="I altered the readme file. I added the research paper associated with the project to the readme.">
+      <created>1648098015965</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1648098015965</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -99,28 +99,12 @@ model = MobileNetUlcerModel()
 
 base_learning_rate = hyperparameters['base_LR']
 
-# Check if base RMSProp has larger AUC than Adams
-# model.compile(optimizer=tf.keras.optimizers.RMSprop(learning_rate=base_learning_rate),
-#              loss='binary_crossentropy',
-#              metrics=['AUC', 'accuracy'])
-
-# with tf.device('/job:localhost/replica:0/task:0/device:CPU:0'):
-#    history = model.fit(train_dataset, validation_data=validation_dataset, epochs=hyperparameters['initial_epochs'])
-
 conv_base = model.layers[4]
 
 conv_base.trainable = True
 
 for layer in conv_base.layers[:hyperparameters['frozen_layer']]:
     layer.trainable = False
-
-# model.compile(optimizer=tf.keras.optimizers.RMSprop(learning_rate=0.1 * hyperparameters['base_LR']),
-#              loss='binary_crossentropy',
-#              metrics=['AUC', 'accuracy'])
-
-# history_tuning = model.fit(train_dataset,
-#                           epochs=hyperparameters['fine_tune_epochs'],
-#                           validation_data=validation_dataset)
 
 # Compile the mobilenet using an RMSprop optimizer (gradient descent based optimizer)
 model.compile(optimizer=tf.keras.optimizers.RMSprop(learning_rate=0.1 * hyperparameters['base_LR']),
