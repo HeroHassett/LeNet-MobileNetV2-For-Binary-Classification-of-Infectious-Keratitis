@@ -8,6 +8,7 @@ from keras import layers
 from keras import regularizers
 import pandas as pd
 
+# Put all hyperparameters in a dictionary
 hyperparameters = {'batch_size': 128,
                    'random_flip': 'horizontal_and_vertical',
                    'random_rotation': (0.2),
@@ -18,10 +19,13 @@ hyperparameters = {'batch_size': 128,
                    'fine_tune_epochs': 50,
                    'frozen_layer': 72}
 
+# Declare all necessary variables
 BATCH_SIZE = hyperparameters['batch_size']
 IMG_SIZE = (224, 224)
 path = "/Users/alexk/Documents/GitHub/LeNet-MobileNetV2-For-Binary-Classification-of-Infectious-Keratitis/Images"
 
+
+# Preprocess images to the standard for a MobileNetV2
 train_dataset = keras.preprocessing.image_dataset_from_directory(path,
                                                                  shuffle=True,
                                                                  subset='training',
@@ -85,10 +89,11 @@ def MobileNetUlcerModel(image_shape=IMG_SIZE, data_augmentation=data_augmenter()
     outputs = tf.keras.layers.Dense(1, activation='sigmoid', kernel_regularizer=regularizers.l2(hyperparameters['L2']))(
         x)
 
+    # Add sigmoid output layer if necessary (use AUC for classification metric of prediction)
+
     model = tf.keras.Model(inputs, outputs)
 
     return model
-
 
 model = MobileNetUlcerModel()
 
@@ -117,15 +122,25 @@ for layer in conv_base.layers[:hyperparameters['frozen_layer']]:
 #                           epochs=hyperparameters['fine_tune_epochs'],
 #                           validation_data=validation_dataset)
 
+# Compile the mobilenet using an RMSprop optimizer (gradient descent based optimizer)
 model.compile(optimizer=tf.keras.optimizers.RMSprop(learning_rate=0.1 * hyperparameters['base_LR']),
-              loss='binary_crossentropy',
-              metrics=['accuracy', 'AUC'])
-# RMSprop (gradient-based learning optimizer leads to significant overfitting
-# Higher AUC compared to validation accuracy indicates an inefficient classifier for RMSprop optimizer
-with tf.device('/job:localhost/replica:0/task:0/device:CPU:0'):
+              loss='binary_crossentropy', # measuring the loss using the binary cross-entropy function
+              metrics=['accuracy', 'AUC']) # metrics of accuracy are AUC and accuracy
+
+with tf.device('/job:localhost/replica:0/task:0/device:CPU:0'): # fits the model using the CPU (only necessary on apple silicon)
     history = model.fit(train_dataset,
                         epochs=hyperparameters['fine_tune_epochs'],
                         validation_data=validation_dataset)
+
+# SGD based optimizer for MobileNetV2 (Gradient descent optimization)
+model.compile(optimizer=tf.keras.optimizer.SGD(learning_rate=0.1 * hyperparameters['base_LR']),
+              loss='binary_crossentropy',
+              metrics=['accuracy', 'AUC'])
+
+with tf.device('CPU:0'):
+    history_sgd = model.fit(train_dataset,
+                            validation_data=validation_dataset,
+                            epochs=hyperparameters['fine_tune_epochs'])
 
 # Achieves a 0.9552 peak validation accuracy indicating that MobileNet can handle data augmentation
 model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.1 * hyperparameters['base_LR']),
